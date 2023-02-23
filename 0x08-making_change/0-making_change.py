@@ -1,39 +1,18 @@
 #!/usr/bin/python3
-"""
-Change comes from within
-"""
+"""Making change O(n)"""
 
 
 def makeChange(coins, total):
-    '''
-    calculate the the fewest number of coins needed to meet
-    a given amount total
-    Parameters
-    ----------
-    coins : list
-    total : int
-    Returns
-    _______
-    int: number of coins
-    '''
-    if total <= 0:
+    """Clasic Bottom-Up dynamic programming"""
+    temp_value = 0
+    coins.sort(reverse=True)
+
+    if total < 0:
         return 0
 
-    placeholder = total + 1
+    for coin in coins:
+        if total % coin <= total:
+            temp_value += total // coin
+            total = total % coin
 
-    memo = {0: 0}
-
-    for i in range(1, total + 1):
-        memo[i] = placeholder
-
-        for coin in coins:
-            current = i - coin
-            if current < 0:
-                continue
-
-            memo[i] = min(memo[current] + 1, memo[i])
-
-    if memo[total] == total + 1:
-        return -1
-
-    return memo[total]
+    return temp_value if total == 0 else -1
